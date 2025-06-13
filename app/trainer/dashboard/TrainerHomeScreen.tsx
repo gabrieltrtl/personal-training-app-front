@@ -1,11 +1,15 @@
 import React from "react";
-import { View, StyleSheet, ScrollView} from 'react-native'
+import { StyleSheet, ScrollView} from 'react-native'
 import TotalStudentsCard from "../cards/TotalStudentsCard";
+import ActiveStudentsCard from "../cards/ActiveStudentsCard";
+import DietLibraryCard from "../cards/DietLibraryCard";
 
 export default function TrainerDashboard() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <TotalStudentsCard />
+      <ActiveStudentsCard />
+      <DietLibraryCard />
     </ScrollView>
   )
 }

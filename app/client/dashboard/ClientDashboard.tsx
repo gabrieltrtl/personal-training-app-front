@@ -1,8 +1,8 @@
 import { ScrollView, View, StyleSheet } from 'react-native';
-import WorkoutCard from '../../../src/components/client/cards/WorkoutCard';
-import DietCard from '../../../src/components/client/cards/DietCard';
-import ErgogenicsCard from '../../../src/components/client/cards/ErgogenicsCard';
-import ManipuladosCard from '../../../src/components/client/cards/ManipuladosCard';
+import WorkoutCard from '../cards/WorkoutCard'
+import DietCard from '../cards/DietCard';
+import ErgogenicsCard from '../cards/ErgogenicsCard';
+import ManipuladosCard from '../cards/ManipuladosCard';
 
 export default function AlunoDashboard() {
   return (
