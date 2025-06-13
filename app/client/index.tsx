@@ -7,9 +7,9 @@ export default function ClientLogin() {
   const [senha, setSenha] = useState('');
 
   const handleLogin = () => {
-    if (email === 'aluno@email.com' && senha === '123456') {
+    if (email === '' && senha === '') {
       Alert.alert('Bem-vindo!', 'Login do aluno bem-sucedido!');
-      // router.push('/client/home'); // tela protegida futura
+      router.push('/client/dashboard/ClientDashboard');
     } else {
       Alert.alert('Erro', 'Credenciais inválidas ou você não é aluno.');
     }
