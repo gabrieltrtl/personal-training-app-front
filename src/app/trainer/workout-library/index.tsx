@@ -23,7 +23,7 @@ export default function WorkoutLibrary() {
   }
 
   const handleNewWorkout = () => {
-    router.push("/trainer/dashboard/diet-library/create"); // rota fictícia por enquanto
+    router.push("/trainer/workout-library/create-workout"); // rota fictícia por enquanto
   };
 
   const renderItem = ({ item }: { item: WorkoutTemplate }) => (
@@ -43,7 +43,7 @@ export default function WorkoutLibrary() {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.newButton} onPress={handleNewWorkout}>
-        <Text style={styles.newButtonText}>+ Nova Dieta</Text>
+        <Text style={styles.newButtonText}>+ Novo Treino</Text>
       </TouchableOpacity>
 
       <FlatList
