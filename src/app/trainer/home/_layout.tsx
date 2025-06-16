@@ -1,5 +1,6 @@
 // app/client/trainer/dashboard/_layout.tsx
 import { Tabs } from "expo-router";
+import { Text } from 'react-native'
 import { Ionicons } from "@expo/vector-icons";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
@@ -24,16 +25,7 @@ export default function TrainerTabsLayout() {
           tabBarIcon: ({ color }) => (
             <Ionicons name="home-outline" size={24} color={color} />
           ),
-          tabBarLabel: ({ focused, color }) =>
-            focused ? (
-              <Animated.Text
-                entering={FadeIn}
-                exiting={FadeOut}
-                style={{ color, fontSize: 12 }}
-              >
-                Início
-              </Animated.Text>
-            ) : null,
+          tabBarLabel: 'Home'
         }}
       />
       <Tabs.Screen
@@ -42,16 +34,7 @@ export default function TrainerTabsLayout() {
           tabBarIcon: ({ color }) => (
             <Ionicons name="people-outline" size={24} color={color} />
           ),
-          tabBarLabel: ({ focused, color }) =>
-            focused ? (
-              <Animated.Text
-                entering={FadeIn}
-                exiting={FadeOut}
-                style={{ color, fontSize: 12 }}
-              >
-                Alunos
-              </Animated.Text>
-            ) : null,
+          tabBarLabel: 'Alunos'
         }}
       />
       <Tabs.Screen
@@ -60,16 +43,7 @@ export default function TrainerTabsLayout() {
           tabBarIcon: ({ color }) => (
             <Ionicons name="settings-outline" size={24} color={color} />
           ),
-          tabBarLabel: ({ focused, color }) =>
-            focused ? (
-              <Animated.Text
-                entering={FadeIn}
-                exiting={FadeOut}
-                style={{ color, fontSize: 12 }}
-              >
-                Config
-              </Animated.Text>
-            ) : null,
+          tabBarLabel: 'Configurações'
         }}
       />
     </Tabs>

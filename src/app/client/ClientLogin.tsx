@@ -9,7 +9,7 @@ export default function ClientLogin() {
   const handleLogin = () => {
     if (email === '' && senha === '') {
       Alert.alert('Bem-vindo!', 'Login do aluno bem-sucedido!');
-      router.push('/client/dashboard/ClientDashboard');
+      router.push('/client/home');
     } else {
       Alert.alert('Erro', 'Credenciais inválidas ou você não é aluno.');
     }
