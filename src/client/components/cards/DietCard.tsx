@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import GenericCard from '../../common/GenericCard'
+import GenericCard from '../../../common/GenericCard'
 
 export default function DietCard() {
   const handlePress = () => {

@@ -9,7 +9,7 @@ export default function TrainerLogin() {
   const handleLogin = () => {
     if (email === '' && senha === '') {
       Alert.alert('Login realizado!', 'Bem-vindo, personal!');
-      router.push('/trainer/dashboard/TrainerHomeScreen');
+      router.push('/trainer/home');
     } else {
       Alert.alert('Erro', 'Credenciais inválidas ou você não é um personal.');
     }

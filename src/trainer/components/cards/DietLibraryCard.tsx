@@ -1,13 +1,13 @@
 // src/components/trainer/cards/DietLibraryCard.tsx
 import React from 'react';
-import GenericCard from '../../common/GenericCard'
+import GenericCard from '../../../common/GenericCard';
 import { useRouter } from 'expo-router';
 
 export default function DietLibraryCard() {
   const router = useRouter();
 
   const handlePress = () => {
-    router.push('/trainer/dashboard/diet-library');
+    router.push('/trainer/diet-library');
   };
 
   return (

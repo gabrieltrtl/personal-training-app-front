@@ -1,7 +1,6 @@
 // app/client/trainer/dashboard/_layout.tsx
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Text } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 export default function TrainerTabsLayout() {
@@ -20,7 +19,7 @@ export default function TrainerTabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="TrainerHomeScreen"
+        name="index"
         options={{
           tabBarIcon: ({ color }) => (
             <Ionicons name="home-outline" size={24} color={color} />
@@ -72,10 +71,6 @@ export default function TrainerTabsLayout() {
               </Animated.Text>
             ) : null,
         }}
-      />
-      <Tabs.Screen
-        name="diet-library"
-        options={{ href: null }} // impede que apareça na tab bar
       />
     </Tabs>
   );

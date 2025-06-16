@@ -1,5 +1,5 @@
 import React from "react";
-import GenericCard from '../../common/GenericCard'
+import GenericCard from '../../../common/GenericCard'
 
 export default function ManipuladosCard() {
   return (

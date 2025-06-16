@@ -10,14 +10,14 @@ export default function HomeScreen() {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push('/client/ClientLoginScreen')}
+        onPress={() => router.push('/client/ClientLogin')}
       >
         <Text style={styles.buttonText}>SOU ALUNO</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push('/trainer/TrainerLoginScreen')}
+        onPress={() => router.push('/trainer/TrainerLogin')}
       >
         <Text style={styles.buttonText}>SOU PERSONAL</Text>
       </TouchableOpacity>
