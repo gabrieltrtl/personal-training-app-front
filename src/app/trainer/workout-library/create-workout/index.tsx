@@ -47,7 +47,6 @@ export default function CreateWorkout() {
   }
 
   console.log('Treino criado:', workout);
-  Alert.alert('Sucesso', 'Treino salvo com sucesso!');
     // Aqui você pode fazer o POST pro backend
 
   return (
