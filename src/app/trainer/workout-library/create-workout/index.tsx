@@ -1,8 +1,10 @@
+// create-workout.tsx
+// create-workout screen
 import React, { useState } from "react";
 import { useRouter } from "expo-router";
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'react-native';
 
-type Exercise = {
+type Workout = {
   name: string;
   sets: string;
   reps: string;
@@ -12,7 +14,7 @@ type Exercise = {
 
 export default function CreateWorkout() {
   const [name, setName] = useState('');
-  const [exercises, setExercises] = useState<Exercise[]>([
+  const [exercises, setExercises] = useState<Workout[]>([
     { name: '', sets: '', reps: '', obs: '', rest: ''}
   ]);
 
@@ -22,7 +24,7 @@ export default function CreateWorkout() {
     setExercises([...exercises, { name: '', sets: '', reps: '', obs: '', rest: ''}])
   }
 
-  const handleChangeExercise = (index: number, field: keyof Exercise, value: string) => {
+  const handleChangeExercise = (index: number, field: keyof Workout, value: string) => {
     const newExercises = [...exercises];
     newExercises[index][field] = value;
     setExercises(newExercises)
