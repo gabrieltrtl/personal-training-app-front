@@ -1,29 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   Text,
   View,
   FlatList,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
-
-const mockWorkouts = [
-  { id: '1', name: 'Treino Cutting' },
-  { id: '2', name: 'Treino Bulking' },
-  { id: '3', name: 'Treino Funcional' },
-];
+import { deleteWorkout } from "../../../../services/workout/workoutService";
 
 export default function WorkoutLibrary() {
   const router = useRouter();
+  const [workouts, setWorkouts] = useState<WorkoutTemplate[]>([]);
+  const [loading, setLoading] = useState(true);
 
   interface WorkoutTemplate {
     id: string;
     name: string;
   }
 
+  const fetchWorkouts = async () => {
+    try {
+      const response = await axios.get("http://192.168.1.2:3000/workouts");
+      setWorkouts(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar treinos:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWorkouts();
+  }, []);
+
   const handleNewWorkout = () => {
     router.push("/trainer/workout-library/create-workout"); // rota fictícia por enquanto
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteWorkout(id);
+      setWorkouts((prev) => prev.filter((w) => w.id.toString() !== id));
+    } catch (error) {
+      console.error("Erro ao excluir treino:", error);
+    }
   };
 
   const renderItem = ({ item }: { item: WorkoutTemplate }) => (
@@ -33,7 +56,22 @@ export default function WorkoutLibrary() {
         <TouchableOpacity onPress={() => console.log("Editar", item.id)}>
           <Text style={styles.actionText}>Editar</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("Excluir", item.id)}>
+        <TouchableOpacity
+          onPress={() =>
+            Alert.alert(
+              "Confirmar exclusão",
+              "Deseja realmente excluir este treino?",
+              [
+                { text: "Cancelar", style: "cancel" },
+                {
+                  text: "Excluir",
+                  style: "destructive",
+                  onPress: () => handleDelete(item.id.toString()), // aqui vai a função
+                },
+              ]
+            )
+          }
+        >
           <Text style={[styles.actionText, { color: "red" }]}>Excluir</Text>
         </TouchableOpacity>
       </View>
@@ -47,7 +85,7 @@ export default function WorkoutLibrary() {
       </TouchableOpacity>
 
       <FlatList
-        data={mockWorkouts}
+        data={workouts}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={{ paddingBottom: 100 }}
