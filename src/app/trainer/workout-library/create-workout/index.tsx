@@ -10,6 +10,8 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
+  Modal,
+  SafeAreaView,
 } from "react-native";
 import { saveWorkout } from "../../../../../services/workout/workoutService";
 
@@ -23,18 +25,34 @@ type Workout = {
 
 export default function CreateWorkout() {
   const [name, setName] = useState("");
-  const [exercises, setExercises] = useState<Workout[]>([
-    { name: "", sets: "", reps: "", obs: "", rest: "" },
-  ]);
+  const [exercises, setExercises] = useState<Workout[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [newExercise, setNewExercise] = useState<Workout>({
+    name: "",
+    sets: "",
+    reps: "",
+    obs: "",
+    rest: "",
+  });
 
   const router = useRouter();
 
-  const handleAddExercise = () => {
-    setExercises([
-      ...exercises,
-      { name: "", sets: "", reps: "", obs: "", rest: "" },
-    ]);
+  const handleSaveExercise = () => {
+    if (!newExercise.name || !newExercise.sets || !newExercise.reps) {
+      return Alert.alert("Erro", "Preencha os campos obrigatórios");
+    }
+
+    setExercises([...exercises, newExercise]); // [ADICIONADO]
+    setNewExercise({ name: "", sets: "", reps: "", obs: "", rest: "" }); // [ADICIONADO]
+    setShowModal(false); // [ADICIONADO]
   };
+
+  // const handleAddExercise = () => {
+  //   setExercises([
+  //     ...exercises,
+  //     { name: "", sets: "", reps: "", obs: "", rest: "" },
+  //   ]);
+  // };
 
   const handleChangeExercise = (
     index: number,
@@ -48,11 +66,8 @@ export default function CreateWorkout() {
 
   const handleSaveWorkout = async () => {
     if (!name.trim()) return Alert.alert("Erro", "Informe o nome do treino");
-    if (exercises.some((e) => !e.name || !e.sets || !e.reps)) {
-      return Alert.alert(
-        "Erro",
-        "Preencha todos os campos obrigatórios dos exercícios"
-      );
+    if (exercises.length === 0) {
+      return Alert.alert("Erro", "Adicione pelo menos um exercício");
     }
 
     const workout = {
@@ -68,16 +83,18 @@ export default function CreateWorkout() {
     };
 
     try {
-      const result = await saveWorkout(workout);
+      await saveWorkout(workout);
       Alert.alert("Sucesso", "Treino salvo com sucesso!");
       router.back(); // redireciona pra tela anterior
     } catch (error: any) {
-      console.error("Erro ao salvar treino:", error.response?.data || error.message);
+      console.error(
+        "Erro ao salvar treino:",
+        error.response?.data || error.message
+      );
       Alert.alert("Erro", "Falha ao salvar treino.");
     }
 
     console.log("Treino criado:", workout);
-    
   };
 
   return (
@@ -91,55 +108,118 @@ export default function CreateWorkout() {
         onChangeText={setName}
       />
 
-      {exercises.map((exercise, index) => (
+      {exercises.map((ex, index) => (
         <View key={index} style={styles.exercicioBox}>
-          <Text style={styles.subTitle}>Exercício {index + 1}</Text>
-          <TextInput
-            placeholder="Nome"
-            style={styles.input}
-            value={exercise.name}
-            onChangeText={(text) => {
-              handleChangeExercise(index, "name", text);
-            }}
-          />
-          <TextInput
-            placeholder="Séries"
-            style={styles.input}
-            keyboardType="numeric"
-            value={exercise.sets}
-            onChangeText={(text) => handleChangeExercise(index, "sets", text)}
-          />
-          <TextInput
-            placeholder="Repetições"
-            style={styles.input}
-            keyboardType="numeric"
-            value={exercise.reps}
-            onChangeText={(text) => handleChangeExercise(index, "reps", text)}
-          />
-          <TextInput
-            placeholder="Observações (Opcional)"
-            style={styles.input}
-            value={exercise.obs}
-            onChangeText={(text) => handleChangeExercise(index, "obs", text)}
-          />
+          <Text style={styles.subTitle}>
+            {index + 1}. {ex.name} - {ex.sets}x{ex.reps}
+          </Text>
+          {ex.obs ? <Text>Obs: {ex.obs}</Text> : null}
+          {ex.rest ? <Text>Descanso: {ex.rest}</Text> : null}
         </View>
       ))}
 
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => setShowModal(true)}
+      >
         <Text style={styles.addButtonText}>+ Adicionar Exercício</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.saveButton} onPress={handleSaveWorkout}>
         <Text style={styles.saveButtonText}>Salvar Treino</Text>
       </TouchableOpacity>
+
+      {/* Modal com SafeAreaView para corrigir área segura do iPhone */}
+      <Modal visible={showModal} animationType="slide">
+        <SafeAreaView style={{ flex: 1 }}>
+          {/* ✅ [ADICIONADO] Respeita notch */}
+          <ScrollView contentContainerStyle={styles.modalContent}>
+            <Text style={styles.title}>Novo Exercício</Text>
+
+            <TextInput
+              placeholder="Nome"
+              placeholderTextColor={'#CCC'}
+              style={styles.input}
+              value={newExercise.name}
+              onChangeText={(text) =>
+                setNewExercise({ ...newExercise, name: text })
+              }
+            />
+            <TextInput
+              placeholder="Séries"
+              placeholderTextColor={'#CCC'}
+              style={styles.input}
+              keyboardType="numeric"
+              value={newExercise.sets}
+              onChangeText={(text) =>
+                setNewExercise({ ...newExercise, sets: text })
+              }
+            />
+            <TextInput
+              placeholder="Repetições"
+              placeholderTextColor={'#CCC'}
+              style={styles.input}
+              keyboardType="numeric"
+              value={newExercise.reps}
+              onChangeText={(text) =>
+                setNewExercise({ ...newExercise, reps: text })
+              }
+            />
+            <TextInput
+              placeholder="Descanso (Opcional)"
+              placeholderTextColor={'#CCC'}
+              style={styles.input}
+              value={newExercise.rest}
+              onChangeText={(text) =>
+                setNewExercise({ ...newExercise, rest: text })
+              }
+            />
+            <TextInput
+              placeholder="Observações (Opcional)"
+              placeholderTextColor={'#CCC'}
+              style={styles.input}
+              value={newExercise.obs}
+              onChangeText={(text) =>
+                setNewExercise({ ...newExercise, obs: text })
+              }
+            />
+
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={handleSaveExercise}
+            >
+              <Text style={styles.saveButtonText}>Adicionar</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.addButton, { marginTop: 12 }]}
+              onPress={() => setShowModal(false)}
+            >
+              <Text style={styles.addButtonText}>Cancelar</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </SafeAreaView>
+        {/* ✅ [ADICIONADO] Fecha o SafeAreaView */}
+      </Modal>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 16, paddingBottom: 100 },
-  title: { fontSize: 22, fontWeight: "bold", marginBottom: 20 },
-  subTitle: { fontSize: 16, fontWeight: "bold", marginTop: 16 },
+  container: {
+    padding: 16,
+    paddingBottom: 100,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  subTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 8,
+  },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
@@ -148,10 +228,10 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   exercicioBox: {
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#f0f0f0",
     padding: 12,
     borderRadius: 8,
-    marginBottom: 12,
+    marginBottom: 10,
   },
   addButton: {
     backgroundColor: "#eee",
@@ -176,4 +256,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
+  modalContent: { // ✅ [ADICIONADO] Corrige erro do ScrollView no Modal
+    padding: 16,
+    paddingBottom: 60,
+    backgroundColor: "#fff",
+    flexGrow: 1,
+  },
 });
+
