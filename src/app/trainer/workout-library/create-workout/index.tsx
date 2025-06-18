@@ -14,6 +14,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { saveWorkout } from "../../../../../services/workout/workoutService";
+import ExerciseFormModal from "../../../../trainer/components/create-workout/ExerciseFormModal";
 
 type Workout = {
   name: string;
@@ -27,32 +28,8 @@ export default function CreateWorkout() {
   const [name, setName] = useState("");
   const [exercises, setExercises] = useState<Workout[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [newExercise, setNewExercise] = useState<Workout>({
-    name: "",
-    sets: "",
-    reps: "",
-    obs: "",
-    rest: "",
-  });
 
   const router = useRouter();
-
-  const handleSaveExercise = () => {
-    if (!newExercise.name || !newExercise.sets || !newExercise.reps) {
-      return Alert.alert("Erro", "Preencha os campos obrigatórios");
-    }
-
-    setExercises([...exercises, newExercise]); // [ADICIONADO]
-    setNewExercise({ name: "", sets: "", reps: "", obs: "", rest: "" }); // [ADICIONADO]
-    setShowModal(false); // [ADICIONADO]
-  };
-
-  // const handleAddExercise = () => {
-  //   setExercises([
-  //     ...exercises,
-  //     { name: "", sets: "", reps: "", obs: "", rest: "" },
-  //   ]);
-  // };
 
   const handleChangeExercise = (
     index: number,
@@ -128,79 +105,13 @@ export default function CreateWorkout() {
       <TouchableOpacity style={styles.saveButton} onPress={handleSaveWorkout}>
         <Text style={styles.saveButtonText}>Salvar Treino</Text>
       </TouchableOpacity>
-
-      {/* Modal com SafeAreaView para corrigir área segura do iPhone */}
-      <Modal visible={showModal} animationType="slide">
-        <SafeAreaView style={{ flex: 1 }}>
-          {/* ✅ [ADICIONADO] Respeita notch */}
-          <ScrollView contentContainerStyle={styles.modalContent}>
-            <Text style={styles.title}>Novo Exercício</Text>
-
-            <TextInput
-              placeholder="Nome"
-              placeholderTextColor={'#CCC'}
-              style={styles.input}
-              value={newExercise.name}
-              onChangeText={(text) =>
-                setNewExercise({ ...newExercise, name: text })
-              }
-            />
-            <TextInput
-              placeholder="Séries"
-              placeholderTextColor={'#CCC'}
-              style={styles.input}
-              keyboardType="numeric"
-              value={newExercise.sets}
-              onChangeText={(text) =>
-                setNewExercise({ ...newExercise, sets: text })
-              }
-            />
-            <TextInput
-              placeholder="Repetições"
-              placeholderTextColor={'#CCC'}
-              style={styles.input}
-              keyboardType="numeric"
-              value={newExercise.reps}
-              onChangeText={(text) =>
-                setNewExercise({ ...newExercise, reps: text })
-              }
-            />
-            <TextInput
-              placeholder="Descanso (Opcional)"
-              placeholderTextColor={'#CCC'}
-              style={styles.input}
-              value={newExercise.rest}
-              onChangeText={(text) =>
-                setNewExercise({ ...newExercise, rest: text })
-              }
-            />
-            <TextInput
-              placeholder="Observações (Opcional)"
-              placeholderTextColor={'#CCC'}
-              style={styles.input}
-              value={newExercise.obs}
-              onChangeText={(text) =>
-                setNewExercise({ ...newExercise, obs: text })
-              }
-            />
-
-            <TouchableOpacity
-              style={styles.saveButton}
-              onPress={handleSaveExercise}
-            >
-              <Text style={styles.saveButtonText}>Adicionar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.addButton, { marginTop: 12 }]}
-              onPress={() => setShowModal(false)}
-            >
-              <Text style={styles.addButtonText}>Cancelar</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </SafeAreaView>
-        {/* ✅ [ADICIONADO] Fecha o SafeAreaView */}
-      </Modal>
+      
+      <ExerciseFormModal 
+        visible={showModal}
+        onClose={() => setShowModal(false)}
+        onSave={(exercise) => setExercises([...exercises, exercise])}
+      />
+      
     </ScrollView>
   );
 }
