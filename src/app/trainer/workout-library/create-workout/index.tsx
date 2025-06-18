@@ -125,7 +125,7 @@ export default function CreateWorkout() {
         </View>
       ))}
 
-      <TouchableOpacity style={styles.addButton} onPress={handleSaveWorkout}>
+      <TouchableOpacity style={styles.addButton}>
         <Text style={styles.addButtonText}>+ Adicionar Exercício</Text>
       </TouchableOpacity>
 

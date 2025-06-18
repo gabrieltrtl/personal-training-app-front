@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import {
   Text,
@@ -13,6 +14,7 @@ import { deleteWorkout } from "../../../../services/workout/workoutService";
 
 export default function WorkoutLibrary() {
   const router = useRouter();
+  const isFocused = useIsFocused();
   const [workouts, setWorkouts] = useState<WorkoutTemplate[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,8 +35,10 @@ export default function WorkoutLibrary() {
   };
 
   useEffect(() => {
-    fetchWorkouts();
-  }, []);
+    if (isFocused) {
+      fetchWorkouts();
+    }
+  }, [isFocused]);
 
   const handleNewWorkout = () => {
     router.push("/trainer/workout-library/create-workout"); // rota fictícia por enquanto
