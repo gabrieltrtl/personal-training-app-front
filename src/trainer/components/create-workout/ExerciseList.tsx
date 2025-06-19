@@ -7,7 +7,27 @@ type Props = {
 }
 
 export default function ExerciseList({ exercises }: Props) {
+  if (exercises.length === 0) {
+    return (
+      <Text style={styles.emptyText}>
+        Nenhum exercício adicionado ainda.
+      </Text>
+    );
+  }
 
+  return (
+    <View style={styles.listContainer}>
+      {exercises.map((ex, index) => (
+        <View key={index} style={styles.exercicioBox}>
+          <Text style={styles.subTitle}>
+            {index + 1}. {ex.name} - {ex.sets}x{ex.reps}
+          </Text>
+          {ex.obs ? <Text>Obs: {ex.obs}</Text> : null}
+          {ex.rest ? <Text>Descanso: {ex.rest}</Text> : null}
+        </View>
+      ))}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

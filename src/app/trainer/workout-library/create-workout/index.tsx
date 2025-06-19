@@ -15,25 +15,19 @@ import {
 } from "react-native";
 import { saveWorkout } from "../../../../../services/workout/workoutService";
 import ExerciseFormModal from "../../../../trainer/components/create-workout/ExerciseFormModal";
-
-type Workout = {
-  name: string;
-  sets: string;
-  reps: string;
-  obs?: string;
-  rest?: string;
-};
+import ExerciseList from "@/trainer/components/create-workout/ExerciseList";
+import { Exercise } from "services/workout/workoutTypes";
 
 export default function CreateWorkout() {
   const [name, setName] = useState("");
-  const [exercises, setExercises] = useState<Workout[]>([]);
+  const [exercises, setExercises] = useState<Exercise[]>([]);
   const [showModal, setShowModal] = useState(false);
 
   const router = useRouter();
 
   const handleChangeExercise = (
     index: number,
-    field: keyof Workout,
+    field: keyof Exercise,
     value: string
   ) => {
     const newExercises = [...exercises];
@@ -52,8 +46,8 @@ export default function CreateWorkout() {
       trainerId: 1,
       exercises: exercises.map((e) => ({
         name: e.name,
-        sets: parseInt(e.sets),
-        reps: parseInt(e.reps),
+        sets: e.sets,
+        reps: e.reps,
         rest: e.rest,
         obs: e.obs,
       })),
@@ -85,15 +79,7 @@ export default function CreateWorkout() {
         onChangeText={setName}
       />
 
-      {exercises.map((ex, index) => (
-        <View key={index} style={styles.exercicioBox}>
-          <Text style={styles.subTitle}>
-            {index + 1}. {ex.name} - {ex.sets}x{ex.reps}
-          </Text>
-          {ex.obs ? <Text>Obs: {ex.obs}</Text> : null}
-          {ex.rest ? <Text>Descanso: {ex.rest}</Text> : null}
-        </View>
-      ))}
+      <ExerciseList exercises={exercises} />
 
       <TouchableOpacity
         style={styles.addButton}
