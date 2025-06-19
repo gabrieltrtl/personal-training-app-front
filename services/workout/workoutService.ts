@@ -16,3 +16,13 @@ export const saveWorkout = async (workout: WorkoutDTO) => {
 export const deleteWorkout = async (id: string | number) => {
   return api.delete(`/workouts/${id}`);
 }
+
+export const getWorkoutById = async (id: string | number) => {
+  const response = await api.get(`/workouts/${id}`);
+  return response.data;
+};
+
+export const updateWorkout = async (id: string | number, updatedData: Partial<WorkoutDTO>) => {
+  const response = await api.put(`/workouts/${id}`);
+  return response.data;
+}
