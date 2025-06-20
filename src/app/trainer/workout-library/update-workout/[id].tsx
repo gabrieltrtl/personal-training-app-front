@@ -38,6 +38,7 @@ export default function EditWorkout()  {
       Alert.alert('Sucesso', 'Treino atualizado com sucesso!');
       router.back();
     } catch (error) {
+      console.error("Erro ao atualizar:", error); //
       Alert.alert('Erro', 'Falha ao atualizar treino.');
     }
   };

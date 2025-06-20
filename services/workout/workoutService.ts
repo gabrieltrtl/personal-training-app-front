@@ -23,6 +23,6 @@ export const getWorkoutById = async (id: string | number) => {
 };
 
 export const updateWorkout = async (id: string | number, updatedData: Partial<WorkoutDTO>) => {
-  const response = await api.put(`/workouts/${id}`);
+  const response = await api.put(`/workouts/${id}`, updatedData);
   return response.data;
 }
