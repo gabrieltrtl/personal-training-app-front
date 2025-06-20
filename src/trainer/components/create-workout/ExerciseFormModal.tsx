@@ -13,6 +13,7 @@ type Props = {
   visible: boolean;
   onClose: () => void;
   onSave: (exercise: Exercise) => void;
+  initialData?: Exercise | null;
 };
 
 export default function ExerciseFormModal({ visible, onClose, onSave}: Props) {

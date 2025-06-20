@@ -57,9 +57,14 @@ export default function WorkoutLibrary() {
     <View style={styles.card}>
       <Text style={styles.cardTitle}>{item.name}</Text>
       <View style={styles.actions}>
-        <TouchableOpacity onPress={() => console.log("Editar", item.id)}>
+        <TouchableOpacity
+          onPress={() =>
+            router.push(`/trainer/workout-library/update-workout/${item.id}`)
+          }
+        >
           <Text style={styles.actionText}>Editar</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() =>
             Alert.alert(
