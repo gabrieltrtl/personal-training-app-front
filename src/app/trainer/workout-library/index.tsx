@@ -54,38 +54,34 @@ export default function WorkoutLibrary() {
   };
 
   const renderItem = ({ item }: { item: WorkoutTemplate }) => (
-    <View style={styles.card}>
-      <Text style={styles.cardTitle}>{item.name}</Text>
-      <View style={styles.actions}>
-        <TouchableOpacity
-          onPress={() =>
-            router.push(`/trainer/workout-library/update-workout/${item.id}`)
-          }
-        >
-          <Text style={styles.actionText}>Editar</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() =>
-            Alert.alert(
-              "Confirmar exclusão",
-              "Deseja realmente excluir este treino?",
-              [
-                { text: "Cancelar", style: "cancel" },
-                {
-                  text: "Excluir",
-                  style: "destructive",
-                  onPress: () => handleDelete(item.id.toString()), // aqui vai a função
-                },
-              ]
-            )
-          }
-        >
-          <Text style={[styles.actionText, { color: "red" }]}>Excluir</Text>
-        </TouchableOpacity>
-      </View>
+  <TouchableOpacity
+    style={styles.card}
+    onPress={() => router.push(`/trainer/workout-library/workout-details/${item.id}`)}
+    activeOpacity={0.8}
+  >
+    <Text style={styles.cardTitle}>{item.name}</Text>
+    <View style={styles.actions}>
+      <TouchableOpacity onPress={() => router.push(`/trainer/workout-library/update-workout/${item.id}`)}>
+        <Text style={styles.actionText}>Editar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          Alert.alert("Confirmar exclusão", "Deseja realmente excluir este treino?", [
+            { text: "Cancelar", style: "cancel" },
+            {
+              text: "Excluir",
+              style: "destructive",
+              onPress: () => handleDelete(item.id.toString()),
+            },
+          ])
+        }
+      >
+        <Text style={[styles.actionText, { color: "red" }]}>Excluir</Text>
+      </TouchableOpacity>
     </View>
-  );
+  </TouchableOpacity>
+);
+
 
   return (
     <View style={styles.container}>

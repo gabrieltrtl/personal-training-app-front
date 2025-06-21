@@ -1,31 +1,37 @@
-import React, { useEffect, useState } from 'react'
-import { useLocalSearchParams, useRouter } from 'expo-router'
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert,  } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { getWorkoutById, updateWorkout } from 'services/workout/workoutService';
 import { Exercise } from 'services/workout/workoutTypes';
-import ExerciseFormModal from '../../../../trainer/components/create-workout/ExerciseFormModal'
+import ExerciseFormModal from '@/trainer/components/create-workout/ExerciseFormModal';
 
-export default function EditWorkout()  {
+
+export default function WorkoutDetails() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const [name, setName] = useState('')
+  const [name, setName] = useState('');
   const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingExerciseIndex, setEditingExerciseIndex] = useState<number | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     fetchWorkout();
   }, []);
 
   const fetchWorkout = async () => {
-    try {
-      const data = await getWorkoutById(id);
-      setName(data.name);
-      setExercises(Array.isArray(data.exercise) ? data.exercise : []);
-    } catch (error) {
-      Alert.alert('Erro','Falha ao carregar treino.');
-    } 
-  };
+      try {
+        const data = await getWorkoutById(id);
+        console.log('Workout data:', data);
+        setName(data.name);
+        setExercises(Array.isArray(data.exercises) ? data.exercises : []);
+      } catch (error) {
+        console.error('Erro ao carregar treino:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
   const handleSaveWorkout = async () => {
     if (!name.trim()) return Alert.alert('Erro', 'Informe o nome do treino');
@@ -36,9 +42,9 @@ export default function EditWorkout()  {
     try {
       await updateWorkout(id, { name, exercises });
       Alert.alert('Sucesso', 'Treino atualizado com sucesso!');
-      router.back();
-    } catch (error) {
-      console.error("Erro ao atualizar:", error); //
+      setIsEditing(false);
+    } catch (err) {
+      console.error("Erro ao atualizar:", err);
       Alert.alert('Erro', 'Falha ao atualizar treino.');
     }
   };
@@ -48,33 +54,58 @@ export default function EditWorkout()  {
     setModalVisible(true);
   }
 
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+ 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.screenTitle}> Detalhes do Treino</Text>
+          <TouchableOpacity onPress={() => setIsEditing(prev => !prev)}>
+            <Text style={styles.toggleEdit}>{isEditing ? 'Cancelar' : 'Editar'}</Text>
+          </TouchableOpacity>     
+      </View>
+
       <Text style={styles.label}>Nome do Treino</Text>
-      <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-        placeholder="Digite o nome do treino"
-      />
+      {isEditing ? (
+        <TextInput 
+          style={styles.input}
+          value={name}
+          onChangeText={setName}
+          placeholder='Digite o nome do treino'
+        />
+      ) : (
+        <Text style={styles.title}>{name}</Text>
+      )}
 
       <Text style={styles.label}>Exercícios</Text>
-      {exercises.map((exercise, index) => (
+      {exercises.map((e, index) => (
         <View key={index} style={styles.exerciseItem}>
-          <Text>{exercise.name} - {exercise.sets}x{exercise.reps}</Text>
-          <TouchableOpacity onPress={() => handleEditExercise(index)}>
-            <Text style={styles.editButton}>Editar</Text>
-          </TouchableOpacity>
+          <Text>{e.name} - {e.sets}x{e.reps}</Text>
+          {isEditing && (
+            <TouchableOpacity onPress={() => handleEditExercise(index)}>
+              <Text style={styles.editButton}>Editar</Text>
+            </TouchableOpacity>
+          )}
         </View>
       ))}
 
-      <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.addButton}>
-        <Text style={styles.addButtonText}>+ Adicionar Exercício</Text>
-      </TouchableOpacity>
+      {isEditing && (
+        <>
+          <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.addButton}>
+            <Text style={styles.addButtonText}>+ Adicionar Exercício</Text>
+          </TouchableOpacity>
 
-      <TouchableOpacity onPress={handleSaveWorkout} style={styles.saveButton}>
-        <Text style={styles.saveButtonText}>Salvar Alterações</Text>
-      </TouchableOpacity>
+          <TouchableOpacity onPress={handleSaveWorkout} style={styles.saveButton}>
+            <Text style={styles.saveButtonText}>Salvar Alterações</Text>
+          </TouchableOpacity>
+        </>
+      )}
 
       <ExerciseFormModal
         visible={modalVisible}
@@ -97,6 +128,7 @@ export default function EditWorkout()  {
         }}
         initialData={editingExerciseIndex !== null ? exercises[editingExerciseIndex] : null}
       />
+
     </ScrollView>
   );
 }
@@ -105,9 +137,33 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
   },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  screenTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  toggleEdit: {
+    color: '#007bff',
+    fontWeight: 'bold',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 18,
+    marginBottom: 16,
+  },
   label: {
     fontSize: 16,
     fontWeight: '600',
+    marginTop: 16,
     marginBottom: 8,
   },
   input: {
@@ -115,7 +171,6 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 6,
     padding: 10,
-    marginBottom: 16,
   },
   exerciseItem: {
     marginBottom: 12,
