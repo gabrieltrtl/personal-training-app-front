@@ -8,27 +8,27 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { deleteWorkout } from "../../../../services/workout/workoutService";
 
-export default function WorkoutLibrary() {
+interface WorkoutRoutine {
+  id: string;
+  name: string;
+}
+
+export default function WorkoutRoutineLibrary() {
   const router = useRouter();
   const isFocused = useIsFocused();
-  const [workouts, setWorkouts] = useState<WorkoutTemplate[]>([]);
+  const [routines, setRoutines] = useState<WorkoutRoutine[]>([]);
   const [loading, setLoading] = useState(true);
 
-  interface WorkoutTemplate {
-    id: string;
-    name: string;
-  }
-
-  const fetchWorkouts = async () => {
+  const fetchRoutines = async () => {
     try {
-      const response = await axios.get("http://192.168.1.2:3000/workouts");
-      setWorkouts(response.data);
-    } catch (error) {
-      console.error("Erro ao buscar treinos:", error);
+      const response = await axios.get("http://192.168.1.2:3000/workout-routines");
+      setRoutines(response.data);
+    } catch (error: any) {
+      console.error("Erro ao buscar rotinas:", error.response?.data || error.message);
     } finally {
       setLoading(false);
     }
@@ -36,91 +36,122 @@ export default function WorkoutLibrary() {
 
   useEffect(() => {
     if (isFocused) {
-      fetchWorkouts();
+      fetchRoutines();
     }
   }, [isFocused]);
 
-  const handleNewWorkout = () => {
-    router.push("/trainer/workout-library/create-workout"); // rota fictícia por enquanto
-  };
-
   const handleDelete = async (id: string) => {
-    try {
-      await deleteWorkout(id);
-      setWorkouts((prev) => prev.filter((w) => w.id.toString() !== id));
-    } catch (error) {
-      console.error("Erro ao excluir treino:", error);
-    }
+    Alert.alert("Excluir Rotina", "Deseja realmente excluir esta rotina?", [
+      { text: "Cancelar", style: "cancel" },
+      {
+        text: "Excluir",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await axios.delete(`http://192.168.1.2:3000/workout-routines/${id}`);
+            setRoutines((prev) => prev.filter((r) => r.id !== id));
+          } catch (error) {
+            console.error("Erro ao excluir rotina:", error);
+          }
+        },
+      },
+    ]);
   };
 
-  const renderItem = ({ item }: { item: WorkoutTemplate }) => (
-  <TouchableOpacity
-    style={styles.card}
-    onPress={() => router.push(`/trainer/workout-library/workout-details/${item.id}`)}
-    activeOpacity={0.8}
-  >
-    <Text style={styles.cardTitle}>{item.name}</Text>
-    <View style={styles.actions}>
-      <TouchableOpacity onPress={() => router.push(`/trainer/workout-library/update-workout/${item.id}`)}>
-        <Text style={styles.actionText}>Editar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() =>
-          Alert.alert("Confirmar exclusão", "Deseja realmente excluir este treino?", [
-            { text: "Cancelar", style: "cancel" },
-            {
-              text: "Excluir",
-              style: "destructive",
-              onPress: () => handleDelete(item.id.toString()),
-            },
-          ])
-        }
-      >
-        <Text style={[styles.actionText, { color: "red" }]}>Excluir</Text>
-      </TouchableOpacity>
-    </View>
-  </TouchableOpacity>
-);
+  const handleNewRoutine = () => {
+    router.push("/trainer/workout-library/create-routine");
+  };
 
+  const renderItem = ({ item }: { item: WorkoutRoutine }) => (
+    <View style={styles.card}>
+      <TouchableOpacity
+        onPress={() => router.push(`/trainer/workout-library/routine-details/${item.id}`)}
+      >
+        <Text style={styles.cardTitle}>{item.name}</Text>
+      </TouchableOpacity>
+      <View style={styles.actions}>
+        <TouchableOpacity onPress={() => router.push(`/trainer/workout-library/update-routine/${item.id}`)}>
+          <Text style={styles.actionEdit}>Editar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleDelete(item.id)}>
+          <Text style={styles.actionDelete}>Excluir</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.newButton} onPress={handleNewWorkout}>
-        <Text style={styles.newButtonText}>+ Novo Treino</Text>
+      <Text style={styles.header}>Minhas Rotinas de Treino</Text>
+
+      <TouchableOpacity style={styles.newButton} onPress={handleNewRoutine}>
+        <Text style={styles.newButtonText}>+ Nova Rotina</Text>
       </TouchableOpacity>
 
-      <FlatList
-        data={workouts}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: 100 }}
-      />
+      {loading ? (
+        <ActivityIndicator size="large" color="#000" />
+      ) : (
+        <FlatList
+          data={routines}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        />
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#fff" },
-  newButton: {
-    backgroundColor: "#6C4AB6",
-    padding: 14,
-    borderRadius: 8,
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  newButtonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
-  card: {
-    backgroundColor: "#F9F9F9",
-    padding: 16,
-    borderRadius: 8,
+  container: { flex: 1, padding: 20, backgroundColor: "#FFFFFF" },
+  header: {
+    fontSize: 22,
+    fontWeight: "700",
     marginBottom: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 6,
-    elevation: 2,
+    color: "#111",
   },
-  cardTitle: { fontSize: 18, fontWeight: "600", marginBottom: 8 },
-  actions: { flexDirection: "row", justifyContent: "space-between" },
-  actionText: { color: "#6C4AB6", fontWeight: "bold" },
+  newButton: {
+    backgroundColor: "#111",
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  newButtonText: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 16,
+  },
+  card: {
+    backgroundColor: "#F4F4F4",
+    padding: 16,
+    borderRadius: 10,
+    marginBottom: 14,
+    shadowColor: "#000",
+    shadowOpacity: 0.04,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 10,
+    color: "#222",
+  },
+  actions: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    gap: 20,
+  },
+  actionEdit: {
+    color: "#555",
+    fontWeight: "500",
+    fontSize: 14,
+  },
+  actionDelete: {
+    color: "#C00",
+    fontWeight: "500",
+    fontSize: 14,
+  },
 });

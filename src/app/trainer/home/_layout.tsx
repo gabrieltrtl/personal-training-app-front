@@ -38,7 +38,7 @@ export default function TrainerTabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="config"
+        name="configs"
         options={{
           tabBarIcon: ({ color }) => (
             <Ionicons name="settings-outline" size={24} color={color} />
