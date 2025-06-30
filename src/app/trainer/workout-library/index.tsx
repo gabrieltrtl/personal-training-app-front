@@ -82,7 +82,7 @@ export default function WorkoutRoutineLibrary() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Minhas Rotinas de Treino</Text>
+      <Text style={styles.header}>Biblioteca de Treinos</Text>
 
       <TouchableOpacity style={styles.newButton} onPress={handleNewRoutine}>
         <Text style={styles.newButtonText}>+ Nova Rotina</Text>
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 12,
     color: "#111",
+    textAlign: "center",
   },
   newButton: {
     backgroundColor: "#111",
