@@ -21,7 +21,7 @@ export default function AddWorkoutToRoutine() {
   const { id: routineId } = useLocalSearchParams();
 
   const handleAddWorkout = () => {
-    router.push(`/trainer/workout-library/create-routine/add-workout?id=${routineId}`);
+    router.push(`/trainer/workout-library/create-routine/add-exercise?id=${routineId}`);
   };
 
   const handleFinishRoutine = () => {
