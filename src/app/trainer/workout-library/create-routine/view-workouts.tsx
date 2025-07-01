@@ -16,7 +16,7 @@ interface Workout {
   exercises: number;
 }
 
-export default function AddWorkoutToRoutine() {
+export default function ViewWorkouts() {
   const [workouts, setWorkouts] = useState<Workout[]>([]); // isso virá do backend no futuro
   const router = useRouter();
   const { id: routineId } = useLocalSearchParams();
@@ -24,21 +24,24 @@ export default function AddWorkoutToRoutine() {
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const res = await axios.get(`http://192.168.1.2:3000/workouts?routineId=${routineId}`);
+        const res = await axios.get(
+          `http://192.168.1.2:3000/workouts?routineId=${routineId}`
+        );
         setWorkouts(res.data);
       } catch (error) {
-        console.error('Erro ao buscar treinos:', error)
+        console.error("Erro ao buscar treinos:", error);
       }
     };
 
-    if(routineId) {
+    if (routineId) {
       fetchWorkouts();
     }
-
-  }, [routineId])
+  }, [routineId]);
 
   const handleAddWorkout = () => {
-    router.push(`/trainer/workout-library/create-routine/add-exercise?id=${routineId}`);
+    router.push(
+      `/trainer/workout-library/create-routine/create-workout?id=${routineId}`
+    );
   };
 
   const handleFinishRoutine = () => {
@@ -56,11 +59,15 @@ export default function AddWorkoutToRoutine() {
       <FlatList
         data={workouts}
         keyExtractor={(item) => item.id}
-        ListEmptyComponent={<Text style={styles.emptyText}>Nenhum treino adicionado.</Text>}
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>Nenhum treino adicionado.</Text>
+        }
         renderItem={({ item }) => (
           <View style={styles.card}>
             <Text style={styles.cardTitle}>{item.name}</Text>
-            <Text style={styles.cardSubtitle}>{item.exercises} exercício(s)</Text>
+            <Text style={styles.cardSubtitle}>
+              {item.exercises} exercício(s)
+            </Text>
           </View>
         )}
         contentContainerStyle={{ paddingBottom: 100 }}
@@ -70,7 +77,10 @@ export default function AddWorkoutToRoutine() {
         <Text style={styles.addButtonText}>+ Adicionar Treino</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.finishButton} onPress={handleFinishRoutine}>
+      <TouchableOpacity
+        style={styles.finishButton}
+        onPress={handleFinishRoutine}
+      >
         <Text style={styles.finishButtonText}>Finalizar Rotina</Text>
       </TouchableOpacity>
     </View>
@@ -79,7 +89,12 @@ export default function AddWorkoutToRoutine() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff", padding: 20 },
-  title: { fontSize: 22, fontWeight: "bold", marginBottom: 20, alignSelf: "center" },
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 20,
+    alignSelf: "center",
+  },
   card: {
     backgroundColor: "#F5F5F5",
     padding: 16,
