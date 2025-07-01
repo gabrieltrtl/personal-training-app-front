@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Alert,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
+import axios from "axios";
 
 interface Workout {
   id: string;
@@ -19,6 +20,22 @@ export default function AddWorkoutToRoutine() {
   const [workouts, setWorkouts] = useState<Workout[]>([]); // isso virá do backend no futuro
   const router = useRouter();
   const { id: routineId } = useLocalSearchParams();
+
+  useEffect(() => {
+    const fetchWorkouts = async () => {
+      try {
+        const res = await axios.get(`http://192.168.1.2:3000/workouts?routineId=${routineId}`);
+        setWorkouts(res.data);
+      } catch (error) {
+        console.error('Erro ao buscar treinos:', error)
+      }
+    };
+
+    if(routineId) {
+      fetchWorkouts();
+    }
+
+  }, [routineId])
 
   const handleAddWorkout = () => {
     router.push(`/trainer/workout-library/create-routine/add-exercise?id=${routineId}`);
