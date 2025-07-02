@@ -8,9 +8,11 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import axios from "axios";
 
 export default function AddExercise() {
+  console.log("Tela AddExercise carregada"); 
   const router = useRouter();
   const [name, setName] = useState("");
   const [sets, setSets] = useState("");
@@ -18,22 +20,35 @@ export default function AddExercise() {
   const [rest, setRest] = useState("");
   const [obs, setObs] = useState("");
 
-  const handleSave = () => {
+  const { workoutId } = useLocalSearchParams();
+
+  const handleSave = async () => {
     if (!name.trim() || !sets || !reps) {
       return Alert.alert("Erro", "Preencha os campos obrigatórios.");
     }
 
     const exercise = {
-      name,
-      sets: Number(sets),
-      reps: Number(reps),
-      rest,
-      obs,
+      name: name.trim(),
+      sets: parseInt(sets, 10),
+      reps: parseInt(reps, 10),
+      rest: rest?.trim(),
+      obs: obs?.trim(),
     };
 
-    console.log("Exercício Salvo:", exercise);
+    console.log("Payload enviado:", exercise);
 
-    router.back();
+    try {
+      await axios.patch(
+        `http://192.168.1.2:3000/workouts/${workoutId}/add-exercise`,
+        exercise
+      );
+
+      Alert.alert("Sucesso", "Exercício adicionado!");
+      router.back();
+    } catch (error) {
+      console.error("Erro ao adicionar exercício:", error);
+      Alert.alert("Erro", "Não foi possível salvar o exercício.");
+    }
   };
 
   return (
