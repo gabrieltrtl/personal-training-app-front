@@ -39,7 +39,7 @@ export default function ViewWorkouts() {
   }, [routineId]);
 
   const handleAddWorkout = () => {
-    router.push(`/trainer/workout-library/exercises/create/[workoutId].tsx`);
+    router.push(`/trainer/workout-library/workouts/create/[routineId].tsx`);
   };
 
   const handleFinishRoutine = () => {
