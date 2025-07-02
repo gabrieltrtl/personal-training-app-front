@@ -44,7 +44,7 @@ export default function AddExercise() {
       );
 
       Alert.alert("Sucesso", "Exercício adicionado!");
-      router.back();
+      router.replace(`/workout-library/workouts/view/${workoutId}`);
     } catch (error) {
       console.error("Erro ao adicionar exercício:", error);
       Alert.alert("Erro", "Não foi possível salvar o exercício.");
