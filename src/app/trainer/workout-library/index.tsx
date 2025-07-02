@@ -59,7 +59,7 @@ export default function WorkoutRoutineLibrary() {
   };
 
   const handleNewRoutine = () => {
-    router.push("/trainer/workout-library/create-routine");
+    router.push("/trainer/workout-library/routines/create");
   };
 
   const renderItem = ({ item }: { item: WorkoutRoutine }) => (

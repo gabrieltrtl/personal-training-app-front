@@ -40,7 +40,7 @@ export default function ViewWorkouts() {
 
   const handleAddWorkout = () => {
     router.push(
-      `/trainer/workout-library/create-routine/create-workout?id=${routineId}`
+      `/trainer/workout-library/workouts/create/[routineId].tsx`
     );
   };
 
@@ -63,12 +63,12 @@ export default function ViewWorkouts() {
           <Text style={styles.emptyText}>Nenhum treino adicionado.</Text>
         }
         renderItem={({ item }) => (
-          <View style={styles.card}>
+          <TouchableOpacity style={styles.card} onPress={() => router.push(`/trainer/workout-library/edit-workout?id=${item.id}`)}>
             <Text style={styles.cardTitle}>{item.name}</Text>
             <Text style={styles.cardSubtitle}>
               {item.exercises} exercício(s)
             </Text>
-          </View>
+          </TouchableOpacity>
         )}
         contentContainerStyle={{ paddingBottom: 100 }}
       />
