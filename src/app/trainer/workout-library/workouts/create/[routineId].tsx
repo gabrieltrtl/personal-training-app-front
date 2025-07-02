@@ -22,7 +22,10 @@ export default function CreateWorkout() {
 
       const workoutId = response.data.id;
 
-      router.push(`/trainer/workout-library/create-routine/create-exercise?id=${workoutId}`);
+      console.log("Workout ID gerado:", workoutId);
+      router.push(`/trainer/workout-library/exercises/create/${workoutId}`);
+
+
     } catch (error: any) {
       console.error("Erro ao criar treino:", error.response?.data || error.message);
       Alert.alert("Erro", "Não foi possível criar o treino.");
