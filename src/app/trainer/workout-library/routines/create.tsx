@@ -29,7 +29,7 @@ export default function CreateWorkoutRoutineStep1() {
 
       // Vai para próxima etapa passando o ID da rotina recém-criada
 
-      router.push(`/trainer/workout-library/routines/${routineId}/view`);
+      router.push(`/trainer/workout-library/routines/${routineId}`);
     } catch (error: any) {
       console.error("Erro ao criar rotina:", error.response?.data || error.message);
       Alert.alert("Erro", "Não foi possível criar a rotina.");
