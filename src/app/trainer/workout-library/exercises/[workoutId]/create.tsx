@@ -59,7 +59,8 @@ export default function CreateExercise() {
 
       Alert.alert("Sucesso", "Exercício adicionado!");
       console.log("Redirecionando para rotina:", routineId);
-      router.push(`/trainer/workout-library/routines/${routineId}/view`);
+      router.push(`/trainer/workout-library/workouts/${workoutId}`);
+
     } catch (error) {
       console.error("Erro ao adicionar exercício:", error);
       Alert.alert("Erro", "Não foi possível salvar o exercício.");
