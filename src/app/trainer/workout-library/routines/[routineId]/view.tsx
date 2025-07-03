@@ -17,15 +17,16 @@ interface Workout {
 }
 
 export default function ViewWorkouts() {
+  console.log('ViewRoutine carregado!');
   const [workouts, setWorkouts] = useState<Workout[]>([]); // isso virá do backend no futuro
   const router = useRouter();
-  const { id: routineId } = useLocalSearchParams();
+  const { routineId } = useLocalSearchParams();
 
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
         const res = await axios.get(
-          `http://192.168.1.2:3000/workouts?routineId=${routineId}`
+          `http://192.168.1.2:3000/workouts/routine/${routineId}`
         );
         setWorkouts(res.data);
       } catch (error) {
@@ -39,7 +40,7 @@ export default function ViewWorkouts() {
   }, [routineId]);
 
   const handleAddWorkout = () => {
-    router.push(`/trainer/workout-library/workouts/create/[routineId].tsx`);
+    router.push(`/trainer/workout-library/workouts/create/${routineId}`);
   };
 
   const handleFinishRoutine = () => {
@@ -69,7 +70,9 @@ export default function ViewWorkouts() {
           >
             <Text style={styles.cardTitle}>{item.name}</Text>
             <Text style={styles.cardSubtitle}>
-              {item.exercises} exercício(s)
+              {Array.isArray(item.exercises)
+                ? `${item.exercises.length} exercício(s)`
+                : `${item.exercises} exercício(s)`}
             </Text>
           </TouchableOpacity>
         )}

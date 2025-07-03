@@ -12,7 +12,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import axios from "axios";
 
 export default function AddExercise() {
-  console.log("Tela AddExercise carregada"); 
+  console.log("Tela AddExercise carregada");
   const router = useRouter();
   const [name, setName] = useState("");
   const [sets, setSets] = useState("");
@@ -43,8 +43,23 @@ export default function AddExercise() {
         exercise
       );
 
+      const response = await axios.get(
+        `http://192.168.1.2:3000/workouts/${workoutId}`
+      );
+
+      console.log("🎯 Resposta completa do GET /workouts/:id:", response.data);
+
+      const routineId = response.data.routine?.id;
+
+      console.log(routineId);
+
+      if (!routineId) {
+        return Alert.alert("Erro", "Não foi possivel redirecionar");
+      }
+
       Alert.alert("Sucesso", "Exercício adicionado!");
-      router.replace(`/workout-library/workouts/view/${workoutId}`);
+      console.log("Redirecionando para rotina:", routineId);
+      router.push(`/trainer/workout-library/routines/${routineId}/view`);
     } catch (error) {
       console.error("Erro ao adicionar exercício:", error);
       Alert.alert("Erro", "Não foi possível salvar o exercício.");

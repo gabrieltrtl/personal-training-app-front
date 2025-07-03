@@ -1,36 +1,56 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import axios from 'axios';
+import axios from "axios";
 
 export default function CreateWorkout() {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const router = useRouter();
-  const { id: routineId } = useLocalSearchParams();
+  const { routineId } = useLocalSearchParams();
 
   const handleCreateWorkout = async () => {
     if (!name.trim()) {
-      return Alert.alert('Erro', 'Informe o nome do treino.')
+      return Alert.alert("Erro", "Informe o nome do treino.");
     }
 
     try {
-      const response = await axios.post("http://192.168.1.2:3000/workouts", {
+      console.log("routineId vindo da URL:", routineId);
+      console.log("typeof routineId:", typeof routineId);
+      console.log("Number(routineId):", Number(routineId));
+      const payload: any = {
         name,
         trainerId: 4,
         exercises: [],
-      });
+      };
+
+      if (!isNaN(Number(routineId))) {
+        payload.routineId = Number(routineId); // ✅ só envia se for número válido
+      }
+
+      const response = await axios.post(
+        "http://192.168.1.2:3000/workouts",
+        payload
+      );
 
       const workoutId = response.data.id;
 
       console.log("Workout ID gerado:", workoutId);
       router.push(`/trainer/workout-library/exercises/create/${workoutId}`);
-
-
     } catch (error: any) {
-      console.error("Erro ao criar treino:", error.response?.data || error.message);
+      console.error(
+        "Erro ao criar treino:",
+        error.response?.data || error.message
+      );
       Alert.alert("Erro", "Não foi possível criar o treino.");
-    } 
-  }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -47,12 +67,17 @@ export default function CreateWorkout() {
         <Text style={styles.buttonText}>Avançar</Text>
       </TouchableOpacity>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#fff" },
-  title: { fontSize: 22, fontWeight: "bold", marginBottom: 20, alignSelf: "center" },
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 20,
+    alignSelf: "center",
+  },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
