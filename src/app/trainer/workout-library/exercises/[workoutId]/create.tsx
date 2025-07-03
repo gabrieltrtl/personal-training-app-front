@@ -11,7 +11,7 @@ import {
 import { useRouter, useLocalSearchParams } from "expo-router";
 import axios from "axios";
 
-export default function AddExercise() {
+export default function CreateExercise() {
   console.log("Tela AddExercise carregada");
   const router = useRouter();
   const [name, setName] = useState("");

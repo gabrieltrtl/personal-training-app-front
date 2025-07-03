@@ -65,8 +65,7 @@ export default function WorkoutRoutineLibrary() {
   const renderItem = ({ item }: { item: WorkoutRoutine }) => (
     <View style={styles.card}>
       <TouchableOpacity
-        onPress={() => router.push(`/trainer/workout-library/routines/${item.id}/view`)}
-
+        onPress={() => router.push(`/trainer/workout-library/routines/${item.id}`)}
       >
         <Text style={styles.cardTitle}>{item.name}</Text>
       </TouchableOpacity>
