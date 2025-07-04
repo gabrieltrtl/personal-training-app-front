@@ -26,7 +26,6 @@ export default function WorkoutRoutineLibrary() {
   const fetchRoutines = async () => {
     try {
       const response = await axios.get("http://192.168.1.2:3000/workout-routines");
-      console.log(response.data)
       setRoutines(response.data);
     } catch (error: any) {
       console.error("Erro ao buscar rotinas:", error.response?.data || error.message);

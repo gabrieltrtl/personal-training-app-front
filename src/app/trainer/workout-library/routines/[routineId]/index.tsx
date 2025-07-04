@@ -63,9 +63,10 @@ export default function ViewWorkouts() {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.card}
-            onPress={() =>
-              router.push(`/trainer/workout-library/workouts/${item.id}`)
-            }
+            onPress={() => {
+              console.log("Workout ID clicado:", item.id);
+              router.push(`/trainer/workout-library/exercises/${item.id}`);
+            }}
           >
             <Text style={styles.cardTitle}>{item.name}</Text>
             <Text style={styles.cardSubtitle}>

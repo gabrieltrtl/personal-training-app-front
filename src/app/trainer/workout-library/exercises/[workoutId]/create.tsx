@@ -20,6 +20,7 @@ export default function CreateExercise() {
   const [obs, setObs] = useState("");
 
   const { workoutId } = useLocalSearchParams();
+  console.log("workoutId:", workoutId);
 
   const handleSave = async () => {
     if (!name.trim() || !sets || !reps) {
@@ -32,9 +33,11 @@ export default function CreateExercise() {
       reps: parseInt(reps, 10),
       rest: rest?.trim(),
       obs: obs?.trim(),
+      workoutId: workoutId,
     };
 
     try {
+      console.log("Payload enviado:", exercise);
       await axios.patch(
         `http://192.168.1.2:3000/workouts/${workoutId}/add-exercise`,
         exercise
@@ -55,7 +58,6 @@ export default function CreateExercise() {
       Alert.alert("Sucesso", "Exercício adicionado!");
       console.log("Redirecionando para rotina:", routineId);
       router.push(`/trainer/workout-library/workouts/${workoutId}`);
-
     } catch (error) {
       console.error("Erro ao adicionar exercício:", error);
       Alert.alert("Erro", "Não foi possível salvar o exercício.");

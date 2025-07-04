@@ -10,9 +10,11 @@ import {
 import { useLocalSearchParams, useRouter } from "expo-router";
 import axios from "axios";
 import { Exercise } from "services/workout/workoutTypes";
+import Btn from "@/trainer/components/buttons/btn";
 
 export default function ViewExercises() {
   const { workoutId } = useLocalSearchParams();
+  console.log("workoutId (index.tsx):", workoutId);
   const router = useRouter();
   const [exercises, setExercises] = useState<Exercise[]>([]);
 
@@ -49,6 +51,7 @@ export default function ViewExercises() {
           </TouchableOpacity>
         )}
       />
+      <Btn title="Adicionar Exercício" onPress={() => router.push(`/trainer/workout-library/exercises/${workoutId}/create`)}></Btn>
     </View>
   );
 }
