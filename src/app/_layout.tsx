@@ -1,13 +1,12 @@
-// app/_layout.tsx
 import { Stack } from 'expo-router';
-import { GestureHandlerRootView } from 'react-native-gesture-handler'; // ✨ import obrigatório para gestos
+import { GestureHandlerRootView } from 'react-native-gesture-handler'; 
 
 export default function Layout() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}> {/* 🧠 necessário para reconhecer gestos como drag-and-drop */}
+    <GestureHandlerRootView style={{ flex: 1 }}> 
       <Stack
         screenOptions={{
-          headerShown: false, // 🙈 escondendo o header padrão
+          headerShown: false, 
         }}
       />
     </GestureHandlerRootView>
