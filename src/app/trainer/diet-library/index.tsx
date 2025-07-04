@@ -1,8 +1,15 @@
 // app/trainer/dashboard/diet-library/DietLibraryScreen.tsx
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import { useRouter } from "expo-router";
+import axios from "axios";
 
 interface Diet {
   id: string;
@@ -16,36 +23,63 @@ export default function DietLibraryScreen() {
 
   useEffect(() => {
     fetchDiets();
-  }, [])
+  }, []);
 
   const fetchDiets = async () => {
     try {
-      const response = await axios.get('http://192.168.1.2:3000/diets');
+      const response = await axios.get("http://192.168.1.2:3000/diets");
       setDiets(response.data);
     } catch (err) {
-      console.error('Erro ao buscar dietas:', err);
-      Alert.alert('Erro', 'Não foi possível carregar as dietas.');
+      console.error("Erro ao buscar dietas:", err);
+      Alert.alert("Erro", "Não foi possível carregar as dietas.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleNewDiet = () => {
-    router.push('/trainer/dashboard/diet-library/create'); // rota fictícia por enquanto
+    router.push("/trainer/dashboard/diet-library/diets/create");
+  };
+
+  const handleDelete = (dietId: string) => {
+    Alert.alert("Confirmar exclusão", "Deseja excluir esta dieta?", [
+      { text: "Cancelar", style: "cancel" },
+      {
+        text: "Excluir",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await axios.delete(`http://192.168.1.2:3000/diets/${dietId}`);
+            fetchDiets();
+          } catch (error) {
+            console.error("Erro ao excluir dieta:", error);
+            Alert.alert("Erro", "Não foi possível excluir a dieta.");
+          }
+        },
+      },
+    ]);
   };
 
   const renderItem = ({ item }: { item: Diet }) => (
-    <View style={styles.card}>
-      <Text style={styles.cardTitle}>{item.name}</Text>
-      <View style={styles.actions}>
-        <TouchableOpacity onPress={() => console.log('Editar', item.id)}>
-          <Text style={styles.actionText}>Editar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log('Excluir', item.id)}>
-          <Text style={[styles.actionText, { color: 'red' }]}>Excluir</Text>
+    <TouchableOpacity
+      style={styles.card}
+      activeOpacity={0.8}
+      onPress={() =>
+        router.push(`/trainer/dashboard/diet-library/meals/${item.id}`)
+      }
+    >
+      <View style={styles.cardContent}>
+        <Text style={styles.cardTitle}>{item.name}</Text>
+        <TouchableOpacity
+          onPress={(e) => {
+            e.stopPropagation(); // evita que o clique no botão exclua e navegue ao mesmo tempo
+            handleDelete(item.id);
+          }}
+        >
+          <Text style={[styles.actionText, { color: "red" }]}>Excluir</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -55,7 +89,7 @@ export default function DietLibraryScreen() {
       </TouchableOpacity>
 
       <FlatList
-        data={mockDiets}
+        data={diets}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={{ paddingBottom: 100 }}
@@ -65,27 +99,32 @@ export default function DietLibraryScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#fff' },
+  container: { flex: 1, padding: 16, backgroundColor: "#fff" },
   newButton: {
-    backgroundColor: '#6C4AB6',
+    backgroundColor: "#6C4AB6",
     padding: 14,
     borderRadius: 8,
     marginBottom: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
-  newButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  newButtonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
   card: {
-    backgroundColor: '#F9F9F9',
+    backgroundColor: "#F9F9F9",
     padding: 16,
     borderRadius: 8,
     marginBottom: 12,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 6,
     elevation: 2,
   },
-  cardTitle: { fontSize: 18, fontWeight: '600', marginBottom: 8 },
-  actions: { flexDirection: 'row', justifyContent: 'space-between' },
-  actionText: { color: '#6C4AB6', fontWeight: 'bold' },
+  cardContent: {
+    // ✅ ADICIONADO: linha horizontal entre nome e botão
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  cardTitle: { fontSize: 18, fontWeight: "600", marginBottom: 8 },
+  actionText: { color: "#6C4AB6", fontWeight: "bold" },
 });
