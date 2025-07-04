@@ -70,9 +70,6 @@ export default function WorkoutRoutineLibrary() {
         <Text style={styles.cardTitle}>{item.name}</Text>
       </TouchableOpacity>
       <View style={styles.actions}>
-        <TouchableOpacity onPress={() => router.push(`/trainer/workout-library/update-routine/${item.id}`)}>
-          <Text style={styles.actionEdit}>Editar</Text>
-        </TouchableOpacity>
         <TouchableOpacity onPress={() => handleDelete(item.id)}>
           <Text style={styles.actionDelete}>Excluir</Text>
         </TouchableOpacity>

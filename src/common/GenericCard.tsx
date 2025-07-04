@@ -7,7 +7,7 @@ interface GenericCardProps {
   onPress: () => void;
   style?: ViewStyle;
   textColor?: string;
-  img:string,
+  img: string,
 }
 
 const imagens: Record<string, any> = {
@@ -18,7 +18,6 @@ const imagens: Record<string, any> = {
   icone5: require("../../assets/imagens/muscle.png"),
   icone6: require("../../assets/imagens/force.png"),
   icone7: require("../../assets/imagens/exercise.png"),
-
 }
 
 
@@ -31,6 +30,7 @@ export default function GenericCard({
   img
 }: GenericCardProps) {
   const imgSelected = imagens[img];
+  
   return (
     <TouchableOpacity style={[styles.card, style]} onPress={onPress}>
 

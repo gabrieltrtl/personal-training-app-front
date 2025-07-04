@@ -13,11 +13,13 @@ export default function HomeScreen() {
       <LottieView source={require('../../assets/imagens/AnimationLogin.json')}  autoPlay loop style={{ width: 200, height: 200 }}/>
 
       <Text style={styles.title}>Bem-vindo 👋</Text>
-
+  
       <Btn title="SOU ALUNO" onPress={() => router.push("/client/ClientLogin")} />
       <Btn title="SOU PERSONAL" onPress={() => router.push('/trainer/TrainerLogin')} />
 
     </View>
+
+
   );
 }
 
