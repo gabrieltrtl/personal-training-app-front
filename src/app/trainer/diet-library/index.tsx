@@ -65,7 +65,7 @@ export default function DietLibraryScreen() {
       style={styles.card}
       activeOpacity={0.8}
       onPress={() =>
-        router.push(`/trainer/dashboard/diet-library/meals/${item.id}`)
+        router.push(`meals/${item.id}`)
       }
     >
       <View style={styles.cardContent}>
