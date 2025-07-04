@@ -1,27 +1,40 @@
 // app/trainer/dashboard/diet-library/DietLibraryScreen.tsx
-import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
+import axios from 'axios';
 
-const mockDiets = [
-  { id: '1', name: 'Dieta Cutting' },
-  { id: '2', name: 'Dieta Bulking' },
-  { id: '3', name: 'Dieta Cetogênica' },
-];
-
-interface DietTemplate {
+interface Diet {
   id: string;
   name: string;
 }
 
 export default function DietLibraryScreen() {
   const router = useRouter();
+  const [diets, setDiets] = useState<Diet[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchDiets();
+  }, [])
+
+  const fetchDiets = async () => {
+    try {
+      const response = await axios.get('http://192.168.1.2:3000/diets');
+      setDiets(response.data);
+    } catch (err) {
+      console.error('Erro ao buscar dietas:', err);
+      Alert.alert('Erro', 'Não foi possível carregar as dietas.');
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleNewDiet = () => {
     router.push('/trainer/dashboard/diet-library/create'); // rota fictícia por enquanto
   };
 
-  const renderItem = ({ item }: { item: DietTemplate }) => (
+  const renderItem = ({ item }: { item: Diet }) => (
     <View style={styles.card}>
       <Text style={styles.cardTitle}>{item.name}</Text>
       <View style={styles.actions}>
