@@ -4,11 +4,15 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  FlatList,
   Alert,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import axios from "axios";
+
+// 🟩 Adicionado: import da lib de drag and drop
+import DraggableFlatList, {
+  RenderItemParams,
+} from "react-native-draggable-flatlist";
 
 interface Workout {
   id: string;
@@ -17,7 +21,7 @@ interface Workout {
 }
 
 export default function ViewWorkouts() {
-  const [workouts, setWorkouts] = useState<Workout[]>([]); // isso virá do backend no futuro
+  const [workouts, setWorkouts] = useState<Workout[]>([]);
   const router = useRouter();
   const { routineId } = useLocalSearchParams();
 
@@ -27,7 +31,12 @@ export default function ViewWorkouts() {
         const res = await axios.get(
           `http://192.168.1.2:3000/workouts/routine/${routineId}`
         );
-        const sorted = res.data.sort((a: any, b: any) => Number(a.id) - Number(b.id));
+
+        // 🟡 Alterado: ordenar por ordem de criação (ID crescente)
+        const sorted = res.data.sort(
+          (a: any, b: any) => Number(a.id) - Number(b.id)
+        );
+
         setWorkouts(sorted);
       } catch (error) {
         console.error("Erro ao buscar treinos:", error);
@@ -51,33 +60,35 @@ export default function ViewWorkouts() {
     router.push("/trainer/workout-library");
   };
 
+  // 🟩 Adicionado: componente para renderizar item com suporte a drag
+  const renderItem = ({ item, drag }: RenderItemParams<Workout>) => (
+    <TouchableOpacity
+      style={styles.card}
+      onLongPress={drag} // 🟩 Adicionado suporte ao drag
+      onPress={() =>
+        router.push(`/trainer/workout-library/exercises/${item.id}`)
+      }
+    >
+      <Text style={styles.cardTitle}>{item.name}</Text>
+      <Text style={styles.cardSubtitle}>
+        {Array.isArray(item.exercises)
+          ? `${item.exercises.length} exercício(s)`
+          : `${item.exercises} exercício(s)`}
+      </Text>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Treinos da Rotina</Text>
 
-      <FlatList
+      {/* 🟩 Substituído FlatList por DraggableFlatList */}
+      <DraggableFlatList
         data={workouts}
-        keyExtractor={(item) => item.id}
-        ListEmptyComponent={
-          <Text style={styles.emptyText}>Nenhum treino adicionado.</Text>
-        }
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.card}
-            onPress={() => {
-              console.log("Workout ID clicado:", item.id);
-              router.push(`/trainer/workout-library/exercises/${item.id}`);
-            }}
-          >
-            <Text style={styles.cardTitle}>{item.name}</Text>
-            <Text style={styles.cardSubtitle}>
-              {Array.isArray(item.exercises)
-                ? `${item.exercises.length} exercício(s)`
-                : `${item.exercises} exercício(s)`}
-            </Text>
-          </TouchableOpacity>
-        )}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        keyExtractor={(item) => item.id.toString()} // 🟩
+        onDragEnd={({ data }) => setWorkouts(data)} // 🟩
+        renderItem={renderItem} // 🟩
+        contentContainerStyle={{ paddingBottom: 100 }} // 🟩
       />
 
       <TouchableOpacity style={styles.addButton} onPress={handleAddWorkout}>
@@ -110,12 +121,6 @@ const styles = StyleSheet.create({
   },
   cardTitle: { fontSize: 18, fontWeight: "600" },
   cardSubtitle: { color: "#777", marginTop: 4 },
-  emptyText: {
-    textAlign: "center",
-    color: "#888",
-    marginTop: 40,
-    fontSize: 16,
-  },
   addButton: {
     backgroundColor: "#eee",
     padding: 14,
