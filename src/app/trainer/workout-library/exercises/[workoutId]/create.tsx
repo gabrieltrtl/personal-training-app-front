@@ -12,7 +12,6 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import axios from "axios";
 
 export default function CreateExercise() {
-  console.log("Tela AddExercise carregada");
   const router = useRouter();
   const [name, setName] = useState("");
   const [sets, setSets] = useState("");
@@ -35,8 +34,6 @@ export default function CreateExercise() {
       obs: obs?.trim(),
     };
 
-    console.log("Payload enviado:", exercise);
-
     try {
       await axios.patch(
         `http://192.168.1.2:3000/workouts/${workoutId}/add-exercise`,
@@ -46,8 +43,6 @@ export default function CreateExercise() {
       const response = await axios.get(
         `http://192.168.1.2:3000/workouts/${workoutId}`
       );
-
-      console.log("🎯 Resposta completa do GET /workouts/:id:", response.data);
 
       const routineId = response.data.routine?.id;
 

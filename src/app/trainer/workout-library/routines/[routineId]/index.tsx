@@ -17,7 +17,6 @@ interface Workout {
 }
 
 export default function ViewWorkouts() {
-  console.log('ViewRoutine carregado!');
   const [workouts, setWorkouts] = useState<Workout[]>([]); // isso virá do backend no futuro
   const router = useRouter();
   const { routineId } = useLocalSearchParams();
@@ -65,7 +64,7 @@ export default function ViewWorkouts() {
           <TouchableOpacity
             style={styles.card}
             onPress={() =>
-              router.push(`/trainer/workout-library/edit-workout?id=${item.id}`)
+              router.push(`/trainer/workout-library/workouts/${item.id}`)
             }
           >
             <Text style={styles.cardTitle}>{item.name}</Text>

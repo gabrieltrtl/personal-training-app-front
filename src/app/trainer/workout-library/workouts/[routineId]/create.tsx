@@ -21,9 +21,6 @@ export default function CreateWorkout() {
     }
 
     try {
-      console.log("routineId vindo da URL:", routineId);
-      console.log("typeof routineId:", typeof routineId);
-      console.log("Number(routineId):", Number(routineId));
       const payload: any = {
         name,
         trainerId: 4,
