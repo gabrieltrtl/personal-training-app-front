@@ -33,7 +33,6 @@ export default function CreateExercise() {
       reps: parseInt(reps, 10),
       rest: rest?.trim(),
       obs: obs?.trim(),
-      workoutId: workoutId,
     };
 
     try {
@@ -57,7 +56,7 @@ export default function CreateExercise() {
 
       Alert.alert("Sucesso", "Exercício adicionado!");
       console.log("Redirecionando para rotina:", routineId);
-      router.push(`/trainer/workout-library/workouts/${workoutId}`);
+      router.push(`/trainer/workout-library/exercises/${workoutId}`);
     } catch (error) {
       console.error("Erro ao adicionar exercício:", error);
       Alert.alert("Erro", "Não foi possível salvar o exercício.");
