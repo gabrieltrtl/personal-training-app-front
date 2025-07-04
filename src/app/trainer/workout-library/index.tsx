@@ -72,16 +72,22 @@ export default function WorkoutRoutineLibrary() {
   const renderItem = ({ item }: { item: WorkoutRoutine }) => (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => router.push(`/trainer/workout-library/routines/${item.id}`)}
-      >
-      <Text style={styles.cardTitle}>{item.name}</Text>
-      <View style={styles.actions}>
-        <TouchableOpacity onPress={(e) => {
-          e.stopPropagation();
-          handleDelete(item.id)
-          }}>
-          <Text style={styles.actionDelete}>Excluir</Text>
-        </TouchableOpacity>
+      onPress={() =>
+        router.push(`/trainer/workout-library/routines/${item.id}`)
+      }
+    >
+      <View style={styles.cardHeader}>
+        <Text style={styles.cardTitle}>{item.name}</Text>
+        <View style={styles.actions}>
+          <TouchableOpacity
+            onPress={(e) => {
+              e.stopPropagation();
+              handleDelete(item.id);
+            }}
+          >
+            <Text style={styles.actionDelete}>Excluir</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -139,6 +145,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 3,
     elevation: 1,
+  },
+  cardHeader: {
+    // ✅ ADICIONADO: nova view para alinhar nome + excluir
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   cardTitle: {
     fontSize: 18,
