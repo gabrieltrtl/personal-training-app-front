@@ -39,7 +39,7 @@ export default function CreateWorkout() {
       const workoutId = response.data.id;
 
       console.log("Workout ID gerado:", workoutId);
-      router.push(`/trainer/workout-library/workouts/${workoutId}`);
+      router.push(`/trainer/workout-library/routines/${routineId}`);
     } catch (error: any) {
       console.error(
         "Erro ao criar treino:",

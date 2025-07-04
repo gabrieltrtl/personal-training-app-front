@@ -25,10 +25,15 @@ export default function WorkoutRoutineLibrary() {
 
   const fetchRoutines = async () => {
     try {
-      const response = await axios.get("http://192.168.1.2:3000/workout-routines");
+      const response = await axios.get(
+        "http://192.168.1.2:3000/workout-routines"
+      );
       setRoutines(response.data);
     } catch (error: any) {
-      console.error("Erro ao buscar rotinas:", error.response?.data || error.message);
+      console.error(
+        "Erro ao buscar rotinas:",
+        error.response?.data || error.message
+      );
     } finally {
       setLoading(false);
     }
@@ -48,7 +53,9 @@ export default function WorkoutRoutineLibrary() {
         style: "destructive",
         onPress: async () => {
           try {
-            await axios.delete(`http://192.168.1.2:3000/workout-routines/${id}`);
+            await axios.delete(
+              `http://192.168.1.2:3000/workout-routines/${id}`
+            );
             setRoutines((prev) => prev.filter((r) => r.id !== id));
           } catch (error) {
             console.error("Erro ao excluir rotina:", error);
@@ -63,18 +70,20 @@ export default function WorkoutRoutineLibrary() {
   };
 
   const renderItem = ({ item }: { item: WorkoutRoutine }) => (
-    <View style={styles.card}>
-      <TouchableOpacity
-        onPress={() => router.push(`/trainer/workout-library/routines/${item.id}`)}
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => router.push(`/trainer/workout-library/routines/${item.id}`)}
       >
-        <Text style={styles.cardTitle}>{item.name}</Text>
-      </TouchableOpacity>
+      <Text style={styles.cardTitle}>{item.name}</Text>
       <View style={styles.actions}>
-        <TouchableOpacity onPress={() => handleDelete(item.id)}>
+        <TouchableOpacity onPress={(e) => {
+          e.stopPropagation();
+          handleDelete(item.id)
+          }}>
           <Text style={styles.actionDelete}>Excluir</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
