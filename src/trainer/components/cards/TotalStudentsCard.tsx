@@ -14,9 +14,12 @@ export default function TotalStudentsCard() {
   
   return (
    <GenericCard
-      title="Total de Alunos na Base"
+      title="Total de Alunos"
       subtitle={`${total} alunos cadastrados`}
       onPress={handlePress}
+      img="icone2"
     />
   )
 }
+
+

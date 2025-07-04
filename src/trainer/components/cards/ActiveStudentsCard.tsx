@@ -18,6 +18,7 @@ export default function ActiveStudentsCard() {
       title="Alunos Ativos"
       subtitle={`${totalActive} Alunos Ativos`}
       onPress={handlePress}
+      img="icone3"
     />
   )
 }

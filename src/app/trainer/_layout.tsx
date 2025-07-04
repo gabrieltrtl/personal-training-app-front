@@ -5,11 +5,13 @@ export default function TrainerLayout() {
     <Stack
       screenOptions={{
         headerTitle: 'Área do Personal',
+        headerShown:false,
         headerStyle: {
           backgroundColor: '#6200ee',
         },
         headerTintColor: '#fff',
       }}
+      
     />
   );
 }

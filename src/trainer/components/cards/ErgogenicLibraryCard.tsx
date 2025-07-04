@@ -12,9 +12,10 @@ export default function DietLibraryCard() {
 
   return (
     <GenericCard
-      title="Biblioteca de Protocolos"
+      title="Seus Treinos"
       subtitle="Templates de dietas criados"
       onPress={handlePress}
+      img='icone6'
     />
   );
 }

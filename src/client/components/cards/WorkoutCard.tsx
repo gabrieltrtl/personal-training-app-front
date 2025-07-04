@@ -10,6 +10,7 @@ export default function WorkoutCard() {
       <GenericCard
         title="Treino"
         onPress={() => console.log('clicou')}
+        img="icone7"
       />
     );
 }

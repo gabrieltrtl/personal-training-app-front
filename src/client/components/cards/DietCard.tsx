@@ -10,6 +10,7 @@ export default function DietCard() {
     <GenericCard
       title="Dieta"
       onPress={() => console.log('clicou')}
+      img="icone1"
     />
   );
 }

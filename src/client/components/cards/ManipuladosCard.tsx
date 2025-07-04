@@ -3,6 +3,6 @@ import GenericCard from '../../../common/GenericCard'
 
 export default function ManipuladosCard() {
   return (
-    <GenericCard title="Manipulados" onPress={() => console.log("clicou")} />
+    <GenericCard title="Manipulados" onPress={() => console.log("clicou")}   img="icone4"/>
   );
 }

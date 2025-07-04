@@ -1,26 +1,22 @@
 // src/screens/HomeScreen.tsx
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import LottieView from 'lottie-react-native';
 import { router } from 'expo-router';
+import Btn from '@/trainer/components/buttons/btn';
+import ExerciseListAlternate from '@/trainer/components/list/ExerciseListAlternate';
 
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
+
+      <LottieView source={require('../../assets/imagens/AnimationLogin.json')}  autoPlay loop style={{ width: 200, height: 200 }}/>
+
       <Text style={styles.title}>Bem-vindo 👋</Text>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.push('/client/ClientLogin')}
-      >
-        <Text style={styles.buttonText}>SOU ALUNO</Text>
-      </TouchableOpacity>
+      <Btn title="SOU ALUNO" onPress={() => router.push("/client/ClientLogin")} />
+      <Btn title="SOU PERSONAL" onPress={() => router.push('/trainer/TrainerLogin')} />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.push('/trainer/TrainerLogin')}
-      >
-        <Text style={styles.buttonText}>SOU PERSONAL</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -52,6 +48,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 18,
+    fontWeight: 300,
   },
 });
 

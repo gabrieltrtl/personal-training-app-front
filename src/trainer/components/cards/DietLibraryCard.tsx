@@ -15,6 +15,7 @@ export default function DietLibraryCard() {
       title="Biblioteca de Dietas"
       subtitle="Templates de dietas criados"
       onPress={handlePress}
+      img="icone4"
     />
   );
 }

@@ -12,9 +12,10 @@ export default function DietLibraryCard() {
 
   return (
     <GenericCard
-      title="Biblioteca de Manipulados"
+      title="Seus Templates"
       subtitle="Templates de dietas criados"
       onPress={handlePress}
+      img="icone1"
     />
   );
 }

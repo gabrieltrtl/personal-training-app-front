@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, ScrollView} from 'react-native'
+import { StyleSheet, ScrollView, SafeAreaView} from 'react-native'
 import TotalStudentsCard from '../../../trainer/components/cards/TotalStudentsCard';
 import ActiveStudentsCard from '../../../trainer/components/cards/ActiveStudentsCard'
 import DietLibraryCard from '../../../trainer/components/cards/DietLibraryCard';
@@ -11,14 +11,16 @@ import ErgogenicLibraryCard from '../../../trainer/components/cards/ErgogenicLib
 export default function TrainerDashboard() {
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <TotalStudentsCard />
-      <ActiveStudentsCard />
-      <DietLibraryCard />
-      <WorkoutLibraryCard />
-      <CompoundLibraryCard />
-      <ErgogenicLibraryCard />
-    </ScrollView>
+    <SafeAreaView>
+        <ScrollView contentContainerStyle={styles.container}>
+          <TotalStudentsCard />
+          <ActiveStudentsCard />
+          <DietLibraryCard />
+          <WorkoutLibraryCard />
+          <CompoundLibraryCard />
+          <ErgogenicLibraryCard />
+        </ScrollView>
+    </SafeAreaView>
   )
 }
 

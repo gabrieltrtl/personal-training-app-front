@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
+import Btn from '@/trainer/components/buttons/btn';
 
 export default function TrainerLogin() {
   const [email, setEmail] = useState('');
@@ -31,7 +32,8 @@ export default function TrainerLogin() {
         value={senha}
         onChangeText={setSenha}
       />
-      <Button title="Entrar" onPress={handleLogin} />
+     <Btn title="Entrar" onPress={handleLogin} />
+
     </View>
   );
 }
@@ -39,9 +41,11 @@ export default function TrainerLogin() {
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', padding: 20 },
   title: { fontSize: 24, textAlign: 'center', marginBottom: 20 },
-  input: {
-    backgroundColor: '#f1f1f1',
-    padding: 10,
+   input: {
+    backgroundColor: '#fff',
+    padding: 15,
+    width:"100%",
+    elevation:2,
     marginBottom: 12,
     borderRadius: 5,
   },
