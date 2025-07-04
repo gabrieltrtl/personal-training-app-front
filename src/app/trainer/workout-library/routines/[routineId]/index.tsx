@@ -27,7 +27,8 @@ export default function ViewWorkouts() {
         const res = await axios.get(
           `http://192.168.1.2:3000/workouts/routine/${routineId}`
         );
-        setWorkouts(res.data);
+        const sorted = res.data.sort((a: any, b: any) => Number(a.id) - Number(b.id));
+        setWorkouts(sorted);
       } catch (error) {
         console.error("Erro ao buscar treinos:", error);
       }
