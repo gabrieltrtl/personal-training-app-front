@@ -3,9 +3,15 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, 
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import axios from 'axios';
 
+interface FoodItem {
+  food: string,
+  amount: string,
+}
+
 interface Meal {
-  id: string;
+  id: string,
   name: string;
+  items: FoodItem[];
 }
 
 export default function MealListScreen() {
@@ -14,14 +20,15 @@ export default function MealListScreen() {
   const [dietName, setDietName] = useState('');
   const [meals, setMeals] = useState<Meal[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const params = useLocalSearchParams();
   const fetchMeals = async () => {
     try {
       const response = await axios.get(`http://192.168.1.2:3000/diets/${dietId}`);
-      setMeals(response.data.meals);
+      console.log(response);
+      setMeals(response.data.meal);
       setDietName(response.data.name);
-    } catch (err) {
-      console.error('Erro ao buscar refeições:', err);
+    } catch (err: any) {
+      console.error('❌ Erro ao buscar refeições:', err.response?.data || err.message || err);
       Alert.alert('Erro', 'Não foi possível carregar as refeições.');
     } finally {
       setLoading(false);
@@ -43,11 +50,18 @@ export default function MealListScreen() {
     <TouchableOpacity
       style={styles.card}
       activeOpacity={0.8}
-      onPress={() => router.push(`/trainer/dashboard/diet-library/foods/${item.id}`)}
+      onPress={() => { 
+        console.log("ID da dieta clicada:", item.id);
+        router.push(`/trainer/diet-library/meals/${item.id}`)
+      }}
     >
       <Text style={styles.cardTitle}>{item.name}</Text>
     </TouchableOpacity>
   );
+
+   useEffect(() => {
+    console.log("Parâmetros recebidos:", params);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -61,7 +75,7 @@ export default function MealListScreen() {
       ) : (
         <FlatList
           data={meals}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
           contentContainerStyle={{ paddingBottom: 100 }}
         />

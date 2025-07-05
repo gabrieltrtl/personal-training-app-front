@@ -60,12 +60,16 @@ export default function DietLibraryScreen() {
     ]);
   };
 
-  const renderItem = ({ item }: { item: Diet }) => (
+  const renderItem = ({ item }: { item: Diet }) => {
+    console.log('🔍 Roteando para:', `/trainer/diet-library/meals/${item.id}`);
+    return (
     <TouchableOpacity
       style={styles.card}
       activeOpacity={0.8}
-      onPress={() =>
-        router.push(`meals/${item.id}`)
+      onPress={() => {
+        console.log("ID da dieta clicada:", item.id);
+        router.push(`/trainer/diet-library/meals/${item.id}`)
+      }
       }
     >
       <View style={styles.cardContent}>
@@ -80,7 +84,8 @@ export default function DietLibraryScreen() {
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
-  );
+    )
+  };
 
   return (
     <View style={styles.container}>
