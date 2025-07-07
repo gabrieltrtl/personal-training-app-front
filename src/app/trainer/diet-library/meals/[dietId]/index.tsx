@@ -23,7 +23,7 @@ export default function MealListScreen() {
   const params = useLocalSearchParams();
   const fetchMeals = async () => {
     try {
-      const response = await axios.get(`http://192.168.1.2:3000/diets/${dietId}`);
+      const response = await axios.get(`http://192.168.1.6:3000/diets/${dietId}`);
       console.log(response);
       setMeals(response.data.meal);
       setDietName(response.data.name);

@@ -32,7 +32,7 @@ export default function CreateWorkout() {
       }
 
       const response = await axios.post(
-        "http://192.168.1.2:3000/workouts",
+        "http://192.168.1.6:3000/workouts",
         payload
       );
 

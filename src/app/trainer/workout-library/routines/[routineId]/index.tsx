@@ -29,7 +29,7 @@ export default function ViewWorkouts() {
     const fetchWorkouts = async () => {
       try {
         const res = await axios.get(
-          `http://192.168.1.2:3000/workouts/routine/${routineId}`
+          `http://192.168.1.6:3000/workouts/routine/${routineId}`
         );
 
         // 🟡 Alterado: ordenar por ordem de criação (ID crescente)

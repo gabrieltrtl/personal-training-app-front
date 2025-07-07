@@ -26,7 +26,7 @@ export default function WorkoutRoutineLibrary() {
   const fetchRoutines = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.1.2:3000/workout-routines"
+        "http://192.168.1.6:3000/workout-routines"
       );
       setRoutines(response.data);
     } catch (error: any) {
@@ -54,7 +54,7 @@ export default function WorkoutRoutineLibrary() {
         onPress: async () => {
           try {
             await axios.delete(
-              `http://192.168.1.2:3000/workout-routines/${id}`
+              `http://192.168.1.6:3000/workout-routines/${id}`
             );
             setRoutines((prev) => prev.filter((r) => r.id !== id));
           } catch (error) {

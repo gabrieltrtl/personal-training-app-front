@@ -37,12 +37,12 @@ export default function CreateExercise() {
     try {
     
       await axios.patch(
-        `http://192.168.1.2:3000/workouts/${workoutId}/add-exercise`,
+        `http://192.168.1.6:3000/workouts/${workoutId}/add-exercise`,
         exercise
       );
 
       const response = await axios.get(
-        `http://192.168.1.2:3000/workouts/${workoutId}`
+        `http://192.168.1.6:3000/workouts/${workoutId}`
       );
 
       const routineId = response.data.routine?.id;

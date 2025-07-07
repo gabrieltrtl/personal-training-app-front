@@ -20,7 +20,7 @@ export default function CreateWorkoutRoutineStep1() {
     }
 
     try {
-      const response = await axios.post("http://192.168.1.2:3000/workout-routines", {
+      const response = await axios.post("http://192.168.1.6:3000/workout-routines", {
         name,
         trainerId: 4, // 🔧 Substituir depois com ID dinâmico do treinador autenticado
       });
