@@ -24,7 +24,8 @@ export default function MealListScreen() {
   const fetchMeals = async () => {
     try {
       const response = await axios.get(`http://192.168.1.6:3000/diets/${dietId}`);
-      setMeals(response.data.meal);
+      console.log('📦 Resposta da API:', response.data);
+      setMeals(response.data.meals);
       setDietName(response.data.name);
     } catch (err: any) {
       console.error('❌ Erro ao buscar refeições:', err.response?.data || err.message || err);
