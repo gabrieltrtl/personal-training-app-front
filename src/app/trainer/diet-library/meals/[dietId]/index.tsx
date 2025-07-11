@@ -4,12 +4,12 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import axios from 'axios';
 
 interface FoodItem {
-  food: string,
-  amount: string,
+  food: string;
+  amount: string;
 }
 
 interface Meal {
-  id: string,
+  id: string;
   name: string;
   items: FoodItem[];
 }
@@ -24,7 +24,6 @@ export default function MealListScreen() {
   const fetchMeals = async () => {
     try {
       const response = await axios.get(`http://192.168.1.6:3000/diets/${dietId}`);
-      console.log(response);
       setMeals(response.data.meal);
       setDietName(response.data.name);
     } catch (err: any) {
@@ -43,24 +42,26 @@ export default function MealListScreen() {
 
   const handleAddMeal = () => {
     console.log('Adicionar nova refeição para dieta:', dietId);
-    // Depois você pode chamar fetchMeals() novamente aqui
+    if (dietId) {
+      router.push(`/trainer/diet-library/meals/${dietId}/create`);
+    }
   };
 
   const renderItem = ({ item }: { item: Meal }) => (
     <TouchableOpacity
       style={styles.card}
       activeOpacity={0.8}
-      onPress={() => { 
-        console.log("ID da dieta clicada:", item.id);
-        router.push(`/trainer/diet-library/meals/${item.id}`)
+      onPress={() => {
+        console.log('ID da dieta clicada:', item.id);
+        router.push(`/trainer/diet-library/meals/${item.id}`);
       }}
     >
       <Text style={styles.cardTitle}>{item.name}</Text>
     </TouchableOpacity>
   );
 
-   useEffect(() => {
-    console.log("Parâmetros recebidos:", params);
+  useEffect(() => {
+    console.log('Parâmetros recebidos:', params);
   }, []);
 
   return (

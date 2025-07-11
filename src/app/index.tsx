@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { router } from 'expo-router';
 import Btn from '@/trainer/components/buttons/btn';
-import ExerciseListAlternate from '@/trainer/components/list/ExerciseListAlternate';
+
 
 export default function HomeScreen() {
   return (

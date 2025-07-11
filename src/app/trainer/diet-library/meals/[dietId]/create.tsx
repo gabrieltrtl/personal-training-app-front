@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function CreateMealScreen() {
   const { dietId } = useLocalSearchParams();
@@ -9,19 +10,34 @@ export default function CreateMealScreen() {
   const [mealName, setMealName] = useState('');
 
   const handleCreateMeal = async () => {
-    if(!mealName.trim()) {
+    console.log('dietId recebido:', dietId); 
+    if (!mealName.trim()) {
       return Alert.alert('Erro', 'Informe o nome da refeição.');
     }
 
     try {
-      const response = await axios.post('http://192.168.1.6:3000/meals', {
-        name: mealName,
-        dietId: Number(dietId),
-      });
+      const token = await AsyncStorage.getItem('token');
+      console.log(token); // 👈 token salvo após login
 
+      if (!token) {
+        return Alert.alert('Erro', 'Usuário não autenticado.');
+      }
+
+      const response = await axios.post(
+        'http://192.168.1.6:3000/meal', // mantido singular, conforme seu controller
+        {
+          name: mealName,
+          dietId: Number(dietId),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 👈 token enviado corretamente
+          },
+        }
+      );
 
       const mealId = response.data.id;
-      router.replace(`/trainer/diet-library/meals/${mealId}`);
+      router.push(`/trainer/diet-library/meals/${dietId}`);
     } catch (error) {
       console.error(error);
       Alert.alert('Erro', 'Não foi possível criar a refeição.');
@@ -29,11 +45,22 @@ export default function CreateMealScreen() {
   };
 
   return (
-    <View>
-      
+    <View style={styles.container}>
+      <Text style={styles.title}>Nova Refeição</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Ex: Café da Manhã"
+        value={mealName}
+        onChangeText={setMealName}
+      />
+
+      <TouchableOpacity style={styles.button} onPress={handleCreateMeal}>
+        <Text style={styles.buttonText}>Criar Refeição</Text>
+      </TouchableOpacity>
     </View>
-  )
+  );
 }
+
 
 
 const styles = StyleSheet.create({
